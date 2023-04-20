@@ -32,6 +32,13 @@ function Base.push!(C::Container, S::Structure)
     end
 end
 
+function reset_dipole(C)
+    for dip in C.Dipoles
+        dip.Einc = nothing
+        dip.P = nothing
+    end
+end
+
 get_Einc(C::T) where T <: Union{Container, Structure} = reduce(vcat, C.Einc)
 get_P(C::T) where T <: Union{Container, Structure} = reduce(vcat, C.P)
 get_α(C::T) where T <: Union{Container, Structure} = reduce(vcat, C.α)

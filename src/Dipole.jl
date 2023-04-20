@@ -73,7 +73,19 @@ function Base.getproperty(Dip::Dipole, sym::Symbol)
 end
 
 # Define another custom getproperty() function to allow accessing Dipole arrays with dot notation.
-function Base.getproperty(Dip::Array{Dipole}, sym::Symbol)
+function Base.getproperty(Dipolelist::Array{Dipole}, sym::Symbol)
     # Use broadcasting to apply getproperty() to each Dipole in the array.
-    getproperty.(Dip, sym)
+    getproperty.(Dipolelist, sym)
+end
+
+function reset_dipoles(D::Dipole)
+    D.Einc = nothing
+    D.P = nothing
+end
+
+function reset_dipoles(Dipolelist::Array{Dipole})
+    for dip in Dipolelist
+        dip.Einc = nothing
+        dip.P = nothing
+    end
 end

@@ -12,7 +12,7 @@ using Random
 export c, ϵ0, μ0, Z0
 export Container, get_Einc, get_P, get_α
 export CalGreen, CalA, CalPolarization, CalFarField, FarFieldPoyntingVector, FarFieldPower
-export Dipole
+export Dipole, reset_dipoles
 export displacement, distance, unitvec, CarttoSpherical, SphericaltoCart, RotationMatrix
 export FreeSpaceScalarGreen, CouplingTensor, GreenTensor
 export Plot3DPower, PlotDirectivity, PlotScatterers, PlotDifferentialCrossSection

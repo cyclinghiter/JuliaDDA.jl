@@ -14,6 +14,13 @@ function Base.getproperty(S::T, sym::Symbol) where T <: Structure
     end
 end
 
+function reset_dipoles(S::T) where T <: Structure
+    for dip in S.Dipoles
+        dip.Einc = nothing
+        dip.P = nothing
+    end
+end
+
 mutable struct CustomStructure <: Structure
 
     Dipoles :: Vector{Dipole}

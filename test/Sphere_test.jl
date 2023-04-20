@@ -6,7 +6,7 @@ ka = 2
 a = ka / k
 
 C = Container(k)
-Object = Sphere(a, 20, 5, 1)
+Object = Sphere(a, 10, 5, 1)
 # Object = Box(a, a, a, 10, 10, 10, 2+1.5im, 1)
 Ojbect = Rotate(Object, pi/4, n̂=SA[0, 0, 1])
 
