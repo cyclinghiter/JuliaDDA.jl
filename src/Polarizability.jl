@@ -67,4 +67,5 @@ function Lattice_Dispersion_Polarizability(D::Dipole, k)
     end
     # Calculate lattice dispersion polarizability using third function
     α = Lattice_Dispersion_Polarizability(D.ϵ, D.μ, D.d, k)
-    return
+    return α
+end
