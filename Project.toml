@@ -1,0 +1,13 @@
+name = "JuliaDDA"
+uuid = "2213ea26-ac7c-4341-a936-498a5dada457"
+authors = ["Hyunjun Ma"]
+version = "1.0.0-DEV"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
