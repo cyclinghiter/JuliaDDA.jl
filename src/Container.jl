@@ -32,7 +32,7 @@ function Base.push!(C::Container, S::Structure)
     end
 end
 
-function reset_dipole(C)
+function reset_dipole(C::Container)
     for dip in C.Dipoles
         dip.Einc = SA[0+0im, 0+0im, 0+0im]
         dip.P = nothing
