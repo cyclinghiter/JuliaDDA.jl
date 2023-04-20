@@ -34,7 +34,7 @@ end
 
 function reset_dipole(C)
     for dip in C.Dipoles
-        dip.Einc = nothing
+        dip.Einc = SA[0+0im, 0+0im, 0+0im]
         dip.P = nothing
     end
 end

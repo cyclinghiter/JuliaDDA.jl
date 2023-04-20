@@ -79,13 +79,13 @@ function Base.getproperty(Dipolelist::Array{Dipole}, sym::Symbol)
 end
 
 function reset_dipoles(D::Dipole)
-    D.Einc = nothing
+    D.Einc = SA[0+0im, 0+0im, 0+0im]
     D.P = nothing
 end
 
 function reset_dipoles(Dipolelist::Array{Dipole})
     for dip in Dipolelist
-        dip.Einc = nothing
+        dip.Einc = SA[0+0im, 0+0im, 0+0im]
         dip.P = nothing
     end
 end
