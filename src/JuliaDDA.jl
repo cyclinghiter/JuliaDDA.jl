@@ -15,7 +15,7 @@ export CalGreen, CalA, CalPolarization, CalFarField, FarFieldPoyntingVector, Far
 export Dipole
 export displacement, distance, unitvec, CarttoSpherical, SphericaltoCart, RotationMatrix
 export FreeSpaceScalarGreen, CouplingTensor, GreenTensor
-export Plot3DPower, PlotDirectivity, PlotScatterers
+export Plot3DPower, PlotDirectivity, PlotScatterers, PlotDifferentialCrossSection
 export Clausius_Mossoti_Polarizability, Lattice_Dispersion_Polarizability
 export Recorder, SphericalRecorder, SphericalUVRecorder, PlaneRecorder, PoyntingVector, Power
 export Source, CalEinc, PlaneWave, PointSource

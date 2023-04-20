@@ -40,7 +40,7 @@ function SphericaltoCart(X::AbstractVector)
     return x, y, z
 end
 
-function RotationMatrix(θ, ϕ; n̂=SA[0., 0., 1.])
+function RotationMatrix(θ; n̂=SA[0., 0., 1.])
     n̂ = n̂ ./ norm(n̂)
     x = n̂[1]
     y = n̂[2]

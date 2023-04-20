@@ -69,7 +69,7 @@ function CouplingTensorMatGPU(k, Dipolelist :: Array{Dipole}, num_threads = 512)
                 r̂r̂32 = r̂3 * r̂2
                 r̂r̂33 = r̂3 * r̂3
 
-                term1 = exp(1im * k * rⱼₖ) / (4 * π * rⱼₖ)
+                term1 = exp(1im * k * rⱼₖ) / (rⱼₖ)
                 term2 = (1im*k*rⱼₖ .- 1)/ rⱼₖ^2
                 k2 = k^2
 
@@ -140,7 +140,7 @@ function GreenTensorMatGPU(k, Dipolelist :: Array{Dipole}, Recorderlist :: Array
             r̂r̂32 = r̂3 * r̂2
             r̂r̂33 = r̂3 * r̂3
 
-            term1 = - exp(1im * k * rⱼₖ) / (4 * π * rⱼₖ)
+            term1 = - exp(1im * k * rⱼₖ) / (rⱼₖ)
             term2 = (1im*k*rⱼₖ .- 1)/ rⱼₖ^2
             k2 = k^2
 

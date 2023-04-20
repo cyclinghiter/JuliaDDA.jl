@@ -1,5 +1,5 @@
 function FreeSpaceScalarGreen(k, R)
-    return exp(1im * k * R) / (4 * π * R)
+    return exp(1im * k * R) / (R)
 end
 
 function CouplingTensor(k, D1::Dipole, D2::Dipole)
@@ -14,7 +14,7 @@ function CouplingTensor(k, D1::Dipole, D2::Dipole)
         r_norm = norm(r)
         r_hat = r ./ r_norm
         rrT = r_hat * transpose(r_hat)
-        𝔸 = FreeSpaceScalarGreen(k, r_norm) .* (k^2 .* (rrT - I) + (1im * k * r_norm - 1) / r_norm^2 .* (3 .* rrT - I))
+        𝔸 = FreeSpaceScalarGreen(k, r_norm) .* ( k^2 .* (rrT - I) + (1im * k * r_norm - 1) / r_norm^2 .* (3 .* rrT - I))
         return 𝔸
     end
 end
