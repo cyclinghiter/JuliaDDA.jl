@@ -1,29 +1,36 @@
 mutable struct Dipole
     """
+    A struct representing an electric dipole.
+
+    Fields:
     pos: A 3-element static array of type Real representing the position of the dipole.
-    Einc: A 3-element static array of type ComplexF64 representing the incident electric field on the dipole. This field has a default value of [0+0im, 0+0im, 0+0im].
-    P: A 3-element static array of type ComplexF64 representing the dipole moment of the dipole. This field has a default value of nothing.
-    α: A 3-element static array of type ComplexF64 representing the polarizability tensor of the dipole. This field has a default value of nothing.
-    The code also defines two functions for constructing a Dipole object:
+    Einc: A 3-element static array of type ComplexF64 representing the incident electric field on the dipole.
+    P: A 3-element static array of type ComplexF64 representing the dipole moment of the dipole.
+    α: A 3-element static array of type ComplexF64 representing the polarizability tensor of the dipole.
     """
 
     pos :: SVector{3, Real} 
-    Einc :: Union{Nothing, SVector{3, ComplexF64}}
+    Einc :: Union{Nothing, SVector{3, ComplexF64}}  # Use Union{Nothing, ...} to allow for default values.
     P :: Union{Nothing, SVector{3, ComplexF64}}
     α :: Union{Nothing, SVector{3, ComplexF64}}
 
+    # Define a constructor for Dipole objects.
     function Dipole(pos; Einc=nothing, P=nothing, α=nothing)
+        # Use isnothing() to check if optional arguments were passed.
         if isnothing(Einc)
             Einc = SA[0+0im, 0+0im, 0+0im]
         end
-
+        # Use new() to create a new object with the specified fields.
         new(pos, Einc, P, α)
     end
 end 
 
+# Define another constructor that takes x, y, z coordinates instead of an SVector.
 Dipole(x, y, z; Einc=nothing, P=nothing, α=nothing) = Dipole(SA[x,y,z]; Einc=Einc, P=P, α=α)
 
+# Define a custom getproperty() function to allow accessing Dipole fields with dot notation.
 function Base.getproperty(Dip::Dipole, sym::Symbol)
+    # Use if-elseif statements to return the correct field.
     if sym == :x
         return Dip.pos[1]
     elseif sym == :y
@@ -60,10 +67,13 @@ function Base.getproperty(Dip::Dipole, sym::Symbol)
         return Dip.α[3]
 
     else
+        # If the field isn't one of the above, use getfield() to return it.
         return getfield(Dip, sym)
     end
 end
 
+# Define another custom getproperty() function to allow accessing Dipole arrays with dot notation.
 function Base.getproperty(Dip::Array{Dipole}, sym::Symbol)
+    # Use broadcasting to apply getproperty() to each Dipole in the array.
     getproperty.(Dip, sym)
 end

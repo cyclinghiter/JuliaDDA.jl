@@ -2,8 +2,13 @@ abstract type Structure
 end
 
 function Base.getproperty(S::Structure, sym::Symbol)
-    if sym in [:P, :Einc, :α, :pos]
-        return getproperty.(S.Dipoles, sym)
+    if sym in [:x, :y, :z, 
+        :r, :θ, :ϕ, 
+        :Px, :Py, :Pz, 
+        :Eincx, :Eincy, :Eincz, 
+        :αx, :αy, :αz,
+        :P, :Einc, :α, :pos]
+    return getproperty.(S.Dipoles, sym)
     else
         return getfield(S, sym)
     end
@@ -116,7 +121,6 @@ mutable struct Box <: Structure
         return new(x, y, z, n_x, n_y, n_z, ϵ, μ, Dipoles, p_mode, name)
     end
 end
-
 
 mutable struct Plane <: Structure
 
