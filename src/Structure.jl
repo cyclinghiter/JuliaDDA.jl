@@ -1,7 +1,7 @@
 abstract type Structure
 end
 
-function Base.getproperty(S::Structure, sym::Symbol)
+function Base.getproperty(S::T, sym::Symbol) where T <: Structure
     if sym in [:x, :y, :z, 
         :r, :θ, :ϕ, 
         :Px, :Py, :Pz, 
