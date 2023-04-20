@@ -4,9 +4,9 @@
 
 ## Usage
 
-This package is based on the
+This package is based on the reference 
 
-*Yurkin, M. A., & Hoekstra, A. G. (2007). The discrete dipole approximation: an overview and recent developments. Journal of Quantitative Spectroscopy and Radiative Transfer, 106(1-3), 558-589.*
+*Draine, B. T., & Flatau, P. J. (1994). Discrete-dipole approximation for scattering calculations. Josa a, 11(4), 1491-1499.*
 
 # Testing
 
