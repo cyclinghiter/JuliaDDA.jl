@@ -16,7 +16,7 @@ end
 
 function reset_dipoles(S::T) where T <: Structure
     for dip in S.Dipoles
-        dip.Einc = nothing
+        dip.Einc = SA[0+0im, 0+0im, 0+0im]
         dip.P = nothing
     end
 end
