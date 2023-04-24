@@ -21,7 +21,7 @@ function Base.getproperty(C::Container, sym::Symbol)
     end
 end
 
-function Base.push!(C::Container, S::Structure)
+function Base.push!(C::Container, S::T) where T <: Structure
     push!(C.Structures, S)
     for dipole in S.Dipoles
         if ~(dipole in C.Dipoles)
