@@ -33,14 +33,16 @@ function PlaneWave(k::SVector{3}, 𝔼inc::SVector{3}; r0=SA[0., 0., 0.])
     return PlaneWave(Green)
 end
 
-struct PointSource <: Source
+struct DipoleSource <: Source
     Green :: Function
 end
 
-function PointSource(k::SVector{3}, 𝔼inc::SVector{3}; r0=SA[0., 0., 0.])
+function DipoleSource(k, r0::SVector{3}, 𝔼inc::SVector{3})
     function Green(r::SVector{3})
-        disp = displacement(r, r0)
-        return 𝔼inc .* exp(1im .* (k ⋅ disp)) ./ (4π * norm(disp)^2)
+        D = Dipole(r0, α=SA[1,1,1])
+        R = Recorder(r)
+        G = GreenTensor(k, D, R)
+        return G * 𝔼inc
     end
-    return PointSource(Green)
+    return DipoleSource(Green)
 end

@@ -32,6 +32,11 @@ function Base.push!(C::Container, S::T) where T <: Structure
     end
 end
 
+function remove(C::Container, S::T) where T <: Structure
+    deleteat!(C.Structures, findall(x->x==S, C.Structures))
+    deleteat!(C.Dipoles,findall(x->x in S.Dipoles, C.Dipoles))
+end
+
 function reset_dipole(C::Container)
     for dip in C.Dipoles
         dip.Einc = SA[0+0im, 0+0im, 0+0im]

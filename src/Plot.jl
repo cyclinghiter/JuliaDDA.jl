@@ -29,6 +29,7 @@ function Plot3DPower(SphericalRecorder::Array{Recorder};
   colorscale = "Viridis"
   )
   display(plot(p, layout))
+  return plot(p, layout)
 end
 
 function PlotDirectivity(SphericalRecorder::Array{Recorder};

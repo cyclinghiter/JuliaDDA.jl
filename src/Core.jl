@@ -174,14 +174,6 @@ end
 
 function CalGreen(k, Dipolelist :: Array{Dipole}, Recorderlist :: Array{Recorder}; device="gpu", num_threads=512)
     if device == "gpu"
-        return GreenTensorGPU(k, Dipolelist, Recorderlist, num_threads)
-    else
-        return GreenTensor(k, Dipolelist, Recorderlist)
-    end
-end
-
-function CalGreen(k, Dipolelist :: Array{Dipole}, Recorderlist :: Array{Recorder}; device="gpu", num_threads=512)
-    if device == "gpu"
         return GreenTensorMatGPU(k, Dipolelist, Recorderlist, num_threads)
     else
         return GreenTensorMat(k, Dipolelist, Recorderlist)
@@ -190,11 +182,6 @@ end
 
 function CalA(C; device="gpu", num_threads=512)
     return CalA(C.k, C.Dipoles, device=device, num_threads = 512)
-end
-
-function CalGreen(k, Dipolelist, RecArray::Array{Recorder}; device="gpu")
-    G = CalGreen(k, Dipolelist, Recvec, device=device)
-    return G
 end
 
 function CalGreen(C::Container, RecArray::Array{Recorder}; device="gpu")
