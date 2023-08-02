@@ -95,6 +95,7 @@ function CouplingTensorMatGPU(C::Container)
 end
 
 function GreenTensorMat(k, Dipolelist :: Array{Dipole}, Recorderlist :: Array{Recorder})
+    
     𝔸 = zeros(ComplexF64, (3*length(Recorderlist), 3*length(Dipolelist)))
     @inbounds Threads.@threads for (j,D) in collect(enumerate(Dipolelist))
          for (i,R) in collect(enumerate(Recorderlist))
@@ -110,6 +111,7 @@ function GreenTensorMat(C::Container, Recorderlist :: Array{Recorder})
 end
 
 function GreenTensorMatGPU(k, Dipolelist :: Array{Dipole}, Recorderlist :: Array{Recorder}, num_threads=512)
+    Recorderlist = vec(Recorderlist)
     II = CuArray(Matrix{ComplexF64}(I, 3,3))
     r1_array = CuArray(Matrix{ComplexF64}(reduce(hcat, getproperty.(Dipolelist, :pos))))
     r2_array = CuArray(Matrix{ComplexF64}(reduce(hcat, getproperty.(Recorderlist, :pos))))
