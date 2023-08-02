@@ -11,7 +11,7 @@ using Random
 
 export c, ϵ0, μ0, Z0
 export Container, remove, get_Einc, get_P, get_α
-export CalGreen, CalPolarization, CalFarField, FarFieldPoyntingVector, FarFieldPower
+export CalA, CalGreen, CalPolarization, CalFarField, FarFieldPoyntingVector, FarFieldPower
 export Dipole, reset_dipoles
 export displacement, distance, unitvec, CarttoSpherical, SphericaltoCart, RotationMatrix
 export FreeSpaceScalarGreen, CouplingTensor, GreenTensor
