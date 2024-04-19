@@ -69,7 +69,7 @@ function CouplingTensorMatGPU(k, Dipolelist :: Array{Dipole}, num_threads = 512)
                 r̂r̂32 = r̂3 * r̂2
                 r̂r̂33 = r̂3 * r̂3
 
-                term1 = exp(1im * k * rⱼₖ) / (rⱼₖ)
+                term1 = exp(1im * k * rⱼₖ) / (rⱼₖ) 
                 term2 = (1im*k*rⱼₖ .- 1)/ rⱼₖ^2
                 k2 = k^2
 
@@ -106,8 +106,8 @@ function GreenTensorMat(k, Dipolelist :: Array{Dipole}, Recorderlist :: Array{Re
     return 𝔸
 end
 
-function GreenTensorMat(C::Container, Recorderlist :: Array{Recorder})
-    return GreenTensorMat(C.k, C.Dipoles, Recorderlist)
+function GreenTensorMat(C::Container, Recorderlist :: Array{Recorder}, GreenFunction=FreeSpaceGreenTensor)
+    return GreenTensorMat(C.k, C.Dipoles, Recorderlist, GreenFunction)
 end
 
 function GreenTensorMatGPU(k, Dipolelist :: Array{Dipole}, Recorderlist :: Array{Recorder}, num_threads=512)
@@ -174,11 +174,11 @@ function CalA(k, Dipolelist :: Array{Dipole}; device="gpu", num_threads=512)
     end
 end
 
-function CalGreen(k, Dipolelist :: Array{Dipole}, Recorderlist :: Array{Recorder}; device="gpu", num_threads=512)
+function CalGreen(k, Dipolelist :: Array{Dipole}, Recorderlist :: Array{Recorder}; device="gpu", num_threads=512, GreenFunction=FreeSpaceGreenTensor)
     if device == "gpu"
         return GreenTensorMatGPU(k, Dipolelist, Recorderlist, num_threads)
     else
-        return GreenTensorMat(k, Dipolelist, Recorderlist)
+        return GreenTensorMat(k, Dipolelist, Recorderlist, GreenFunction)
     end
 end
 
@@ -186,8 +186,8 @@ function CalA(C; device="gpu", num_threads=512)
     return CalA(C.k, C.Dipoles, device=device, num_threads = 512)
 end
 
-function CalGreen(C::Container, RecArray::Array{Recorder}; device="gpu")
-    G = CalGreen(C.k, C.Dipoles, RecArray, device=device)
+function CalGreen(C::Container, RecArray::Array{Recorder}; device="gpu", GreenFunction=FreeSpaceGreenTensor)
+    G = CalGreen(C.k, C.Dipoles, RecArray, device=device, GreenFunction=GreenFunction)
     return G
 end
 
@@ -219,11 +219,11 @@ function CalPolarization(C::Container; device="gpu", num_threads = 512)
     return P
 end 
 
-function _FarFieldWithNoScattering(C::Container, RecArray::Array{Recorder}; device="gpu")
+function _FarFieldWithNoScattering(C::Container, RecArray::Array{Recorder}; device="gpu", GreenFunction = FreeSpaceGreenTensor)
     Recvec = vec(RecArray)
     Einc = get_Einc(C)
     α = get_α(C)
-    Green = CalGreen(C, Recvec; device=device)
+    Green = CalGreen(C, Recvec; device=device, GreenFunction=GreenFunction)
 
     if device == "gpu"
         Einc = CuArray{ComplexF64}(Einc)
@@ -247,11 +247,11 @@ function _FarFieldWithScattering(C::Container, RecArray::Array{Recorder}; device
     end
 end
 
-function CalFarField(C::Container, RecArray::Array{Recorder}, mode::String, device="gpu")
+function CalFarField(C::Container, RecArray::Array{Recorder}, mode::String, device="gpu", GreenFunction = FreeSpaceGreenTensor)
     if mode == "sca"
         _FarFieldWithScattering(C, RecArray; device=device)
     elseif mode == "inc"
-        _FarFieldWithNoScattering(C, RecArray; device=device)
+        _FarFieldWithNoScattering(C, RecArray; device=device, GreenFunction=GreenFunction)
     else
         error("mode should be 'sca' or 'inc'")
     end
