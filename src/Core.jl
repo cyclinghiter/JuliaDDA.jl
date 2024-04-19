@@ -187,7 +187,7 @@ function CalA(C; device="gpu", num_threads=512)
 end
 
 function CalGreen(C::Container, RecArray::Array{Recorder}; device="gpu", GreenFunction=FreeSpaceGreenTensor)
-    G = CalGreen(C.k, C.Dipoles, RecArray, device=device, GreenFunction=GreenFunction)
+    G = CalGreen(C.k, C.Dipoles, RecArray; device=device, GreenFunction=GreenFunction)
     return G
 end
 
