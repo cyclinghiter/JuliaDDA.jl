@@ -247,7 +247,7 @@ function _FarFieldWithScattering(C::Container, RecArray::Array{Recorder}; device
     end
 end
 
-function CalFarField(C::Container, RecArray::Array{Recorder}; mode::String, device="gpu", GreenFunction = FreeSpaceGreenTensor)
+function CalFarField(C::Container, RecArray::Array{Recorder}; mode="inc", device="gpu", GreenFunction = FreeSpaceGreenTensor)
     if mode == "sca"
         _FarFieldWithScattering(C, RecArray; device=device)
     elseif mode == "inc"
