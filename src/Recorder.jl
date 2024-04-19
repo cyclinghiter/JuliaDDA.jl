@@ -52,34 +52,27 @@ function SphericalRecorder(θlist::Vector, ϕlist::Vector; R=1e10)
     return recorders
 end
 
-function SphericalRecorder(num_θ::Int, num_ϕ::Int; R=1e10, mode="top_hemi")
-    if mode == "top_hemi"
+function SphericalRecorder(num_θ::Int, num_ϕ::Int; R=1e10, mode="top_hemisphere")
+    if mode == "top_hemisphere"
         θlist = Vector(LinRange(0, π/2, num_θ))
         ϕlist = Vector(LinRange(0, 2π, num_ϕ))
         recorders = SphericalRecorder(θlist, ϕlist, R=R)
+
+    elseif mode == "bottom_hemisphere"
+        θlist = Vector(LinRange(π/2, π, num_θ))
+        ϕlist = Vector(LinRange(0, 2π, num_ϕ))
+        recorders = SphericalRecorder(θlist, ϕlist, R=R)
+
     elseif mode == "full"
         θlist = Vector(LinRange(0, π, num_θ))
         ϕlist = Vector(LinRange(0, 2π, num_ϕ))
         recorders = SphericalRecorder(θlist, ϕlist, R=R)
     end
+    
     return recorders
 end
 
-function PlaneRecorder(xlist::Vector, ylist::Vector, z=0; θ=0, ϕ=0)
-    recorders = Array{Recorder}(undef, length(xlist), length(ylist))
-    for (i, x) in enumerate(xlist)
-        for (j, y) in enumerate(ylist)
-            # Oiler rotation
-            x = x*cos(θ)*cos(ϕ) - y*cos(θ)*sin(ϕ) + z*sin(θ)
-            y = x*sin(ϕ) + y*cos(ϕ)
-            z = -x*sin(θ)*cos(ϕ) + y*sin(θ)*sin(ϕ) + z*cos(θ)
-            recorders[i, j] = Recorder(SA[x,y,z], SA[0+0im,0+0im,0+0im])
-        end
-    end
-    return recorders
-end
-
-function SphericalUVRecorder(ulist::Vector, vlist::Vector; R=1e10)
+function UVRecorder(ulist::Vector, vlist::Vector; R=1e10)
     recorders = Array{Recorder}(undef, length(ulist), length(vlist))
     for (i, u) in enumerate(ulist)
         for (j, v) in enumerate(vlist)
@@ -92,43 +85,9 @@ function SphericalUVRecorder(ulist::Vector, vlist::Vector; R=1e10)
     return recorders
 end
 
-function SphericalUVRecorder(num_u::Int, num_v::Int; R=1e10)
+function UVRecorder(num_u::Int, num_v::Int; R=1e10)
     ulist = Vector(LinRange(-1, 1, num_u))
     vlist = Vector(LinRange(-1, 1, num_v))
-    recorders = SphericalUVRecorder(ulist, vlist, R=R)
+    recorders = UVRecorder(ulist, vlist, R=R)
     return recorders
-end
-
-function PoyntingVector(Rec::Recorder; n̂=nothing)
-    if isnothing(n̂)
-        n̂ = unitvec(Rec.pos)
-    end
-    H = 1/Z0*cross(n̂, Rec.E)
-    return 1/2 * real(cross(Rec.E, conj.(H)))
-end
-
-function Power(Rec::Recorder; n̂::T=nothing) where T <: Union{Nothing, SVector{3}}
-    if isnothing(n̂)
-        n̂ = unitvec(Rec.pos)
-    end
-    S = PoyntingVector(Rec; n̂=n̂)
-    return dot(S, n̂)
-end
-
-function PoyntingVector(Recorderlist::Array{Recorder}; n̂=nothing)
-    Slist = zeros(SVector{3}, size(Recorderlist))
-    for (i, rec) in enumerate(Recorderlist)
-        S = PoyntingVector(rec; n̂=n̂)
-        Slist[i] = S
-    end 
-    return Slist
-end
-
-function Power(Recorderlist::Array{Recorder}; n̂=nothing)
-    Plist = zeros(size(Recorderlist))
-    for (i, rec) in enumerate(Recorderlist)
-        P = Power(rec; n̂=n̂)
-        Plist[i] = P
-    end 
-    return Plist
 end

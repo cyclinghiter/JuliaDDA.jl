@@ -22,14 +22,11 @@ function reset_dipoles(S::T) where T <: Structure
 end
 
 mutable struct CustomStructure <: Structure
-
     Dipoles :: Vector{Dipole}
     name :: String
-
     function CustomStructure(Dipoles::Vector{Dipole}, name="CustomStructure")
         new(Dipoles, name)
     end
-
 end
 
 mutable struct Sphere <: Structure

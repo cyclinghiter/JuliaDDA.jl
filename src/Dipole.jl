@@ -1,4 +1,9 @@
-mutable struct Dipole
+using StaticArrays
+using LinearAlgebra
+
+include("Polarizability.jl")
+
+mutable struct Dipole{N <: Real, T <: Number} 
     """
     A struct representing an electric dipole.
 
@@ -9,24 +14,34 @@ mutable struct Dipole
     α: A 3-element static array of type ComplexF64 representing the polarizability tensor of the dipole.
     """
 
-    pos :: SVector{3, Real} 
-    Einc :: Union{Nothing, SVector{3, ComplexF64}}  # Use Union{Nothing, ...} to allow for default values.
-    P :: Union{Nothing, SVector{3, ComplexF64}}
-    α :: Union{Nothing, SVector{3, ComplexF64}}
+    pos :: SVector{3, N} 
+    Einc :: SVector{3, T}
+    P :: SVector{3, T}
+    α :: Union{SVector{3, T}, SMatrix{3,3,T}}
 
     # Define a constructor for Dipole objects.
-    function Dipole(pos; Einc=nothing, P=nothing, α=nothing)
+    function Dipole{N, T}(pos :: SVector{3, N}) where {N, T}
         # Use isnothing() to check if optional arguments were passed.
-        if isnothing(Einc)
-            Einc = SA[0+0im, 0+0im, 0+0im]
-        end
+        Einc = @SArray zeros(T, 3)
+        P = @SArray zeros(T, 3)
+        α = @SArray ones(T, 3)
         # Use new() to create a new object with the specified fields.
         new(pos, Einc, P, α)
     end
 end 
 
 # Define another constructor that takes x, y, z coordinates instead of an SVector.
-Dipole(x, y, z; Einc=nothing, P=nothing, α=nothing) = Dipole(SA[x,y,z]; Einc=Einc, P=P, α=α)
+Dipole(x::N, y::N, z::N; dtype=ComplexF64) where N <: Real = Dipole{N, dtype}(SA[x,y,z])
+
+Dipole(x::N, y::N, z::N, α) where N <: Real = begin
+    P = @SArray zeros(eltype(α), 3)
+    Dipole{N, eltype(Einc)}(SA[x,y,z], Einc, P, α)
+    end
+
+Dipole(x::N, y::N, z::N, Einc, α) where N <: Real = begin
+                                                    P = @SArray zeros(eltype(α), 3)
+                                                    Dipole{N, eltype(α)}(SA[x,y,z], Einc, P, α)
+                                                    end
 
 # Define a custom getproperty() function to allow accessing Dipole fields with dot notation.
 function Base.getproperty(Dip::Dipole, sym::Symbol)
@@ -78,14 +93,16 @@ function Base.getproperty(Dipolelist::Array{Dipole}, sym::Symbol)
     getproperty.(Dipolelist, sym)
 end
 
+
 function reset_dipoles(D::Dipole)
     D.Einc = SA[0+0im, 0+0im, 0+0im]
-    D.P = nothing
+    D.P = SA[0+0im, 0+0im, 0+0im]
 end
 
 function reset_dipoles(Dipolelist::Array{Dipole})
     for dip in Dipolelist
         dip.Einc = SA[0+0im, 0+0im, 0+0im]
-        dip.P = nothing
+        dip.P = SA[0+0im, 0+0im, 0+0im]
     end
 end
+

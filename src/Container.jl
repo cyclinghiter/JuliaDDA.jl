@@ -2,7 +2,6 @@ mutable struct Container
     k::Real
     Structures::Vector{Structure}
     Dipoles::Vector{Dipole}
-
     function Container(k::Real)
         new(k, Structure[], Dipole[])
     end
@@ -27,8 +26,16 @@ function Base.push!(C::Container, S::T) where T <: Structure
         if ~(dipole in C.Dipoles)
             push!(C.Dipoles, dipole)
         else
-            error("Dipole already exists, Can't push it to the container.")
+            error("Same Dipole already exists, Can't push Structure to the container.")
         end
+    end
+end
+
+function Base.push!(C::Container, D::T) where T <: Dipole
+    if ~(D in C.Dipoles)
+        push!(C.Dipoles, D)
+    else
+        error("Same Dipole already exists, Can't push Dipole to the container.")
     end
 end
 
@@ -47,3 +54,4 @@ end
 get_Einc(C::T) where T <: Union{Container, Structure} = reduce(vcat, C.Einc)
 get_P(C::T) where T <: Union{Container, Structure} = reduce(vcat, C.P)
 get_α(C::T) where T <: Union{Container, Structure} = reduce(vcat, C.α)
+

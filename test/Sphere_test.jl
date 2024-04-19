@@ -11,11 +11,11 @@ Object = Sphere(a, 10, 5, 1)
 Ojbect = Rotate(Object, pi/4, n̂=SA[0, 0, 1])
 
 Src = PlaneWave(SA[0, 0, -1], SA[1, 0, 0] ./ sqrt(2))
-Rec = SphericalRecorder(50, 50, R=100, mode="full")
+Rec = SphericalRecorder(50, 50, R=100, mode="top_hemisphere")
 push!(C, Object)
 CalEinc(C, Src)
 CalPolarization(C)
-CalFarField(C, Rec, "sca")
+# CalFarField(C, Rec, "sca")
 
 Volume = 4/3 * pi * a^3
 Po_in = 1 / 2 *ϵ0 * Volume 

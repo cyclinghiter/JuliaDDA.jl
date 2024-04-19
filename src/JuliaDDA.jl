@@ -22,6 +22,7 @@ export Source, CalEinc, PlaneWave, DipoleSource
 export Structure, CustomStructure, Sphere, Box, Plane
 export Pan, Rotate
 
+include("Polarizability.jl")
 include("Dipole.jl")
 include("Structure.jl")
 include("Recorder.jl")
@@ -33,7 +34,6 @@ include("Green.jl")
 include("Transform.jl")
 include("Source.jl")
 include("Plot.jl")
-include("Polarizability.jl")
 
 end
 
