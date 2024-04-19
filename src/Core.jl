@@ -1,11 +1,11 @@
-function CouplingTensorMat(k, Dipolelist :: Array{Dipole})
+function CouplingTensorMat(k, Dipolelist :: Array{Dipole}, GreenFunction::Function = FreeSpaceGreenTensor)
     n = length(Dipolelist)
     𝔸 = zeros(ComplexF64, (3*n, 3*n))
     @inbounds Threads.@threads for j in 1:n
         D1 = Dipolelist[j]
         for i in j:n
             D2 = Dipolelist[i]
-            CouplingTensorD1D2 = CouplingTensor(k, D1, D2)
+            CouplingTensorD1D2 = GreenFunction(k, D1, D2)
             𝔸[3*i-2:3*i, 3*j-2:3*j] = CouplingTensorD1D2
             𝔸[3*j-2:3*j, 3*i-2:3*i] = CouplingTensorD1D2
         end
@@ -94,12 +94,12 @@ function CouplingTensorMatGPU(C::Container)
     return CouplingTensorMatGPU(C.k, C.Dipoles)
 end
 
-function GreenTensorMat(k, Dipolelist :: Array{Dipole}, Recorderlist :: Array{Recorder})
+function GreenTensorMat(k, Dipolelist :: Array{Dipole}, Recorderlist :: Array{Recorder}, GreenFunction::Function = FreeSpaceGreenTensor)
     
     𝔸 = zeros(ComplexF64, (3*length(Recorderlist), 3*length(Dipolelist)))
     @inbounds Threads.@threads for (j,D) in collect(enumerate(Dipolelist))
          for (i,R) in collect(enumerate(Recorderlist))
-            GreenDtoR = GreenTensor(k, D, R)
+            GreenDtoR = GreenFunction(k, D, R)
             𝔸[3*i-2:3*i, 3*j-2:3*j] = GreenDtoR
         end
     end       
@@ -236,7 +236,6 @@ function _FarFieldWithNoScattering(C::Container, RecArray::Array{Recorder}; devi
         CUDA.@allowscalar Rec.E += SVector{3, ComplexF64}(Far[3*i-2:3*i])
     end
 end
-
 
 function _FarFieldWithScattering(C::Container, RecArray::Array{Recorder}; device="gpu")
     Recvec = vec(RecArray)
