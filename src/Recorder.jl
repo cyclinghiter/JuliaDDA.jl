@@ -68,7 +68,6 @@ function SphericalRecorder(num_θ::Int, num_ϕ::Int; R=1e10, mode="top_hemispher
         ϕlist = Vector(LinRange(0, 2π, num_ϕ))
         recorders = SphericalRecorder(θlist, ϕlist, R=R)
     end
-    
     return recorders
 end
 

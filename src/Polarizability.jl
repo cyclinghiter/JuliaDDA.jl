@@ -9,7 +9,7 @@ function Clausius_Mossoti_Polarizability(ϵ::Number, μ::Number, d::Real)
     # - α: polarizability
 
     n = √(Complex(ϵ*μ))
-    dV  = 3/(4*π)* d^3
+    dV  = (4*π)/3 * d^3
     α = dV * (n^2 - 1) / (n^2 + 2) * (@SArray ones(ComplexF64, 3))
     return α
 end
