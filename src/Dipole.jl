@@ -17,7 +17,7 @@ mutable struct Dipole{N <: Real, T <: Number}
     pos :: SVector{3, N} 
     Einc :: SVector{3, T}
     P :: SVector{3, T}
-    α :: Union{SVector{3, T}, SMatrix{3,3,T}}
+    α :: SVector{3, T}
 
     # Define a constructor for Dipole objects.
     function Dipole{N, T}(pos :: SVector{3, N}) where {N, T}
@@ -28,21 +28,11 @@ mutable struct Dipole{N <: Real, T <: Number}
         # Use new() to create a new object with the specified fields.
         new(pos, Einc, P, α)
     end
+
 end 
 
 # Define another constructor that takes x, y, z coordinates instead of an SVector.
 Dipole(x::N, y::N, z::N; dtype=ComplexF64) where N <: Real = Dipole{N, dtype}(SA[x,y,z])
-
-Dipole(x::N, y::N, z::N, α) where N <: Real = begin
-    P = @SArray zeros(eltype(α), 3)
-    Einc = @SArray zeros(ComplexF64, 3)
-    Dipole{N, eltype(Einc)}(SA[x,y,z], Einc, P, α)
-    end
-
-Dipole(x::N, y::N, z::N, Einc, α) where N <: Real = begin
-                                                    P = @SArray zeros(eltype(α), 3)
-                                                    Dipole{N, eltype(α)}(SA[x,y,z], Einc, P, α)
-                                                    end
 
 # Define a custom getproperty() function to allow accessing Dipole fields with dot notation.
 function Base.getproperty(Dip::Dipole, sym::Symbol)
