@@ -35,6 +35,7 @@ Dipole(x::N, y::N, z::N; dtype=ComplexF64) where N <: Real = Dipole{N, dtype}(SA
 
 Dipole(x::N, y::N, z::N, α) where N <: Real = begin
     P = @SArray zeros(eltype(α), 3)
+    Einc = @SArray zeros(ComplexF64, 3)
     Dipole{N, eltype(Einc)}(SA[x,y,z], Einc, P, α)
     end
 
